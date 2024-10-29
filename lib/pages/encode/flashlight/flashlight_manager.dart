@@ -1,3 +1,5 @@
+import 'package:torch_light/torch_light.dart';
+
 abstract class FlashlightManagerAbstract {
   Future<void> turnOnFlashlight();
 
@@ -8,21 +10,18 @@ abstract class FlashlightManagerAbstract {
 
 class FlashlightManager implements FlashlightManagerAbstract {
   @override
-  Future<bool> isFlashlightAvailable() {
-    // TODO: implement isFlashlightAvailable
-    throw UnimplementedError();
+  Future<bool> isFlashlightAvailable() async {
+    return await TorchLight.isTorchAvailable();
   }
 
   @override
-  Future<void> turnOffFlashlight() {
-    // TODO: implement turnOffFlashlight
-    throw UnimplementedError();
+  Future<void> turnOffFlashlight() async {
+    await TorchLight.disableTorch();
   }
 
   @override
-  Future<void> turnOnFlashlight() {
-    // TODO: implement turnOnFlashlight
-    throw UnimplementedError();
+  Future<void> turnOnFlashlight() async {
+    await TorchLight.enableTorch();
   }
 
 }
