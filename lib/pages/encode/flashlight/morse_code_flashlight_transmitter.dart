@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../transmit_morse_code.dart';
 import 'flashlight_manager.dart';
 
@@ -11,21 +13,36 @@ class MorseCodeFlashlightTransmitter extends TransmitMorseCode {
   MorseCodeFlashlightTransmitter(this.flashlightManager);
   @override
   Future<void> transmit(String morseCode) async {
-    // TODO: implement transmit
-    throw UnimplementedError();
+    for (int i = 0; i < morseCode.length;i++)
+    {
+      String singleCharacter = morseCode[i];
+      if (singleCharacter == '.')
+        await transmitDot();
+
+      else if (singleCharacter == '-')
+        await transmitDash();
+
+      else if (singleCharacter == ' ')
+        await waitTimeGapBetweenWords();
+
+      if (singleCharacter == '.' || singleCharacter =='-')
+        await waitTimeGapBetweenDotsAndDashes();
+
+    }
+
   }
 
   @override
   Future<void> transmitDash() async {
     await flashlightManager.turnOnFlashlight();
-    await Future.delayed(Duration(milliseconds: 600)); // Długie włączenie
+    await Future.delayed(Duration(milliseconds: 600));
     await flashlightManager.turnOffFlashlight();
   }
 
   @override
   Future<void> transmitDot() async {
     await flashlightManager.turnOnFlashlight();
-    await Future.delayed(Duration(milliseconds: 200)); // Krótkie włączenie
+    await Future.delayed(Duration(milliseconds: 200));
     await flashlightManager.turnOffFlashlight();
 
   }
@@ -33,7 +50,7 @@ class MorseCodeFlashlightTransmitter extends TransmitMorseCode {
   @override
   Future<void> waitTimeGapBetweenChars() async{
     await Future.delayed(Duration(milliseconds: 700));
-    throw UnimplementedError();
+
   }
 
   @override
