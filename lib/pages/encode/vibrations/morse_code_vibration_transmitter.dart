@@ -28,27 +28,27 @@ class MorseCodeVibrationTransmitter extends TransmitMorseCode {
 
   @override
   Future<void> transmitDash() async {
-    vib.vibrate(duration: 600, amplitude: 128);
+    await vib.vibrate(duration: 900, amplitude: 255);
   }
 
   @override
   Future<void> transmitDot() async {
-    vib.vibrate(duration: 200, amplitude: 128);
+    await vib.vibrate(duration: 300, amplitude: 255);
   }
 
   @override
   Future<void> waitTimeGapBetweenChars() async {
-    await Future.delayed(const Duration(milliseconds: 700));
-  }
-
-  @override
-  Future<void> waitTimeGapBetweenDotsAndDashes() async {
     await Future.delayed(const Duration(milliseconds: 300));
   }
 
   @override
+  Future<void> waitTimeGapBetweenDotsAndDashes() async {
+    await Future.delayed(const Duration(milliseconds: 900));
+  }
+
+  @override
   Future<void> waitTimeGapBetweenWords() async {
-    await Future.delayed(const Duration(milliseconds: 1400));
+    await Future.delayed(const Duration(milliseconds: 1500));
   }
 
 }
