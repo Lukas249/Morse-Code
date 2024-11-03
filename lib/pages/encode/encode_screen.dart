@@ -6,10 +6,11 @@ import 'package:morse_code/pages/components/basic_chat.dart';
 import 'package:morse_code/pages/components/message.dart';
 
 import 'package:morse_code/pages/encode/transmit_morse_code.dart';
+import 'package:morse_code/pages/encode/vibrations/vibration_manager.dart';
 import '../morse_code_text.dart';
 import 'package:morse_code/pages/encode/flashlight/flashlight_manager.dart';
 import 'package:morse_code/pages/encode/flashlight/morse_code_flashlight_transmitter.dart';
-
+import 'vibrations/morse_code_vibration_transmitter.dart';
 
 
 
@@ -40,6 +41,8 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
   };
   late FlashlightManager flashlightManager;
   late MorseCodeFlashlightTransmitter flashlightTransmitter;
+  late VibrationManager vibrationManager;
+  late MorseCodeVibrationTransmitter vibrationTransmitter;
   late Map<MorseCodeOptions, TransmitMorseCode> morseCodeTransmitOptions;
 
   MorseCodeOptions morseCodeOption = MorseCodeOptions.chat;
@@ -51,6 +54,8 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     super.initState();
     flashlightManager = FlashlightManager();  // Inicjalizacja menedżera latarki
     flashlightTransmitter = MorseCodeFlashlightTransmitter(flashlightManager);
+    vibrationManager = VibrationManager();
+    vibrationTransmitter = MorseCodeVibrationTransmitter(vibrationManager);
     _tabController.addListener(onTabChange);
   }
 
@@ -111,10 +116,10 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
       {
         await flashlightTransmitter.transmit(morseCode);
       }
-    //else if(morseCodeOption == MorseCodeOptions.sound)
-      //{
-
-      //}
+    else if(morseCodeOption == MorseCodeOptions.vibrations)
+      {
+        await vibrationTransmitter.transmit(morseCode);
+      }
 
   }
 

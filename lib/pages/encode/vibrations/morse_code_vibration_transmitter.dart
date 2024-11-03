@@ -1,40 +1,54 @@
 import '../transmit_morse_code.dart';
+import 'vibration_manager.dart';
 
 class MorseCodeVibrationTransmitter extends TransmitMorseCode {
+  final VibrationManager vib;
+
+  MorseCodeVibrationTransmitter(this.vib);
   @override
-  Future<void> transmit(String morseCode) {
-    // TODO: implement transmit
-    throw UnimplementedError();
+  Future<void> transmit(String morseCode) async {
+    for (int i = 0; i < morseCode.length;i++)
+    {
+      String singleCharacter = morseCode[i];
+      if (singleCharacter == '.') {
+        await transmitDot();
+      }
+      else if (singleCharacter == '-') {
+        await transmitDash();
+      }
+      else if (singleCharacter == ' ') {
+        await waitTimeGapBetweenWords();
+      }
+      if (singleCharacter == '.' || singleCharacter =='-') {
+        await waitTimeGapBetweenDotsAndDashes();
+      }
+
+    }
   }
 
   @override
-  Future<void> transmitDash() {
-    // TODO: implement transmitDash
-    throw UnimplementedError();
+  Future<void> transmitDash() async {
+    await vib.vibrate(duration: 900, amplitude: 255);
   }
 
   @override
-  Future<void> transmitDot() {
-    // TODO: implement transmitDot
-    throw UnimplementedError();
+  Future<void> transmitDot() async {
+    await vib.vibrate(duration: 300, amplitude: 255);
   }
 
   @override
-  Future<void> waitTimeGapBetweenChars() {
-    // TODO: implement waitTimeGapBetweenChars
-    throw UnimplementedError();
+  Future<void> waitTimeGapBetweenChars() async {
+    await Future.delayed(const Duration(milliseconds: 300));
   }
 
   @override
-  Future<void> waitTimeGapBetweenDotsAndDashes() {
-    // TODO: implement waitTimeGapBetweenDotsAndDashes
-    throw UnimplementedError();
+  Future<void> waitTimeGapBetweenDotsAndDashes() async {
+    await Future.delayed(const Duration(milliseconds: 900));
   }
 
   @override
-  Future<void> waitTimeGapBetweenWords() {
-    // TODO: implement waitTimeGapBetweenWords
-    throw UnimplementedError();
+  Future<void> waitTimeGapBetweenWords() async {
+    await Future.delayed(const Duration(milliseconds: 1500));
   }
 
 }
