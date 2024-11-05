@@ -134,6 +134,15 @@ class MorseCodeText  {
 
     return text.trim();
   }
+
+  static bool isValidMorseCode(String morseCode) {
+
+    for(int i = 0; i < morseCode.length; i++) {
+      if(morseCode[i] != "." && morseCode[i] != "-" && morseCode[i] != " ") return false;
+    }
+
+    return true;
+  }
 }
 
 
