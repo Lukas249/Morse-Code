@@ -1,4 +1,5 @@
 abstract class TransmitMorseCode {
+
   Future<void> transmit(String morseCode) async {
     List<String> morseCodeSplitByWords = morseCode.split(RegExp(r"\s{2,}"));
 
