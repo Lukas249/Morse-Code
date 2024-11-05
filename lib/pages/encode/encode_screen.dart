@@ -39,23 +39,30 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     MorseCodeOptions.vibrations: true,
     MorseCodeOptions.sound: true,
   };
-  late FlashlightManager flashlightManager;
-  late MorseCodeFlashlightTransmitter flashlightTransmitter;
-  late VibrationManager vibrationManager;
-  late MorseCodeVibrationTransmitter vibrationTransmitter;
-  late Map<MorseCodeOptions, TransmitMorseCode> morseCodeTransmitOptions;
 
+  // managers
+  final FlashlightManager flashlightManager = FlashlightManager();
+  final VibrationManager vibrationManager = VibrationManager();
+
+  // transmitters
+  late final MorseCodeFlashlightTransmitter flashlightTransmitter = MorseCodeFlashlightTransmitter(flashlightManager);
+  late final MorseCodeVibrationTransmitter vibrationTransmitter = MorseCodeVibrationTransmitter(vibrationManager);
+
+  // transmit options
+  late final Map<MorseCodeOptions, TransmitMorseCode> morseCodeTransmitOptions = {
+    MorseCodeOptions.flashlight: flashlightTransmitter,
+    MorseCodeOptions.vibrations: vibrationTransmitter
+  };
+
+  // currently selected option
   MorseCodeOptions morseCodeOption = MorseCodeOptions.chat;
 
+  // messages history
   List<Message> messagesList = [];
 
   @override
   void initState() {
     super.initState();
-    flashlightManager = FlashlightManager();  // Inicjalizacja menedżera latarki
-    flashlightTransmitter = MorseCodeFlashlightTransmitter(flashlightManager);
-    vibrationManager = VibrationManager();
-    vibrationTransmitter = MorseCodeVibrationTransmitter(vibrationManager);
     _tabController.addListener(onTabChange);
   }
 
@@ -111,16 +118,12 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     startTransmittingMorseCode(morseCode);
   }
 
-  void startTransmittingMorseCode(morseCode) async{
-    if (morseCodeOption == MorseCodeOptions.flashlight )
-      {
-        await flashlightTransmitter.transmit(morseCode);
-      }
-    else if(morseCodeOption == MorseCodeOptions.vibrations)
-      {
-        await vibrationTransmitter.transmit(morseCode);
-      }
+  void startTransmittingMorseCode(morseCode) async {
+    if(!morseCodeTransmitOptions.containsKey(morseCodeOption)) {
+      return;
+    }
 
+    await morseCodeTransmitOptions[morseCodeOption]?.transmit(morseCode);
   }
 
   @override
