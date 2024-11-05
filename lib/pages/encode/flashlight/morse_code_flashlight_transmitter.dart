@@ -14,30 +14,6 @@ class MorseCodeFlashlightTransmitter extends TransmitMorseCode {
   bool isBeepingon = true; //do zaimplementowania w ustawieniach mozliwosc wylaczenia
 
   MorseCodeFlashlightTransmitter(this.flashlightManager);
-  @override
-  Future<void> transmit(String morseCode) async {
-    for (int i = 0; i < morseCode.length;i++)
-    {
-      String singleCharacter = morseCode[i];
-      if (singleCharacter == '.'){
-        await transmitDot();
-      }
-
-      else if (singleCharacter == '-') {
-        await transmitDash();
-      }
-
-      else if (singleCharacter == ' ') {
-        await waitTimeGapBetweenWords();
-      }
-
-      if (singleCharacter == '.' || singleCharacter =='-') {
-        await waitTimeGapBetweenDotsAndDashes();
-      }
-
-    }
-
-  }
 
   @override
   Future<void> transmitDash() async {
