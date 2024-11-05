@@ -1,5 +1,6 @@
 
 class MorseCodeText  {
+
   static Map<String, String> charToMorseCodeMap = {
     'a': '.-',
     'b': '-...',
@@ -37,7 +38,6 @@ class MorseCodeText  {
     '8': '---..',
     '9': '----.',
     '0': '-----',
-    ' ': '',
   };
 
   static Map<String, String> morseCodeMap = {
@@ -77,65 +77,62 @@ class MorseCodeText  {
     '---..': '8',
     '----.': '9',
     '-----': '0',
-    ' ': '',
-    '  ': ' ',
   };
 
+  static String MORSE_CODE_CHAR_SEPARATOR = " ";
+  static String MORSE_CODE_WORD_SEPARATOR = "   ";
+
+  static String TEXT_WORD_SEPARATOR = " ";
+
   static String encode(String text) {
-    List<String> morseCode = [];
+    List<List<String>> morseCodeSplitByWordsAndChars = [[]];
 
     for (int i = 0; i < text.length; i++) {
       String char = text[i].toLowerCase();
       String? nextChar = i + 1 < text.length ? text[i + 1].toLowerCase() : "";
 
-      bool charIsSpace = char == " " || charToMorseCodeMap[char] == null;
-      bool nextCharIsSpace = nextChar == " " || charToMorseCodeMap[nextChar] == null;
+      bool charIsAlphanumerical = charToMorseCodeMap[char] != null;
+      bool nextCharIsAlphanumerical = charToMorseCodeMap[nextChar] != null;
 
-      if (charIsSpace && nextCharIsSpace) {
-        continue;
+      if (!charIsAlphanumerical && nextCharIsAlphanumerical) {
+        // action should be taken only for the last character that is not alphanumerical in the sequence
+        // add next word
+        morseCodeSplitByWordsAndChars.add([]);
+      } else if(charIsAlphanumerical) {
+        // add next encoded char
+        morseCodeSplitByWordsAndChars.last.add(charToMorseCodeMap[char]!);
       }
-
-      if (charIsSpace) {
-        morseCode.add(charToMorseCodeMap[" "]!);
-        continue;
-      }
-
-      morseCode.add(charToMorseCodeMap[char]!);
     }
 
-    return morseCode.join(" ").trim();
+    List<String> morseCodeSplitByWords = morseCodeSplitByWordsAndChars.map(
+            (List<String> encodedChars) {
+              return encodedChars.join(MORSE_CODE_CHAR_SEPARATOR).trim();
+            }
+    ).toList();
+
+    return morseCodeSplitByWords.join(MORSE_CODE_WORD_SEPARATOR).trim();
   }
 
   static String decode(String morseCode) {
-    String sentence = "";
+    List<String> morseCodeSplitByWords = morseCode.split(MORSE_CODE_WORD_SEPARATOR);
 
-    int i = 0;
+    List<List<String>> morseCodeSplitByWordsAndChars = morseCodeSplitByWords.map(
+            (String encodedChars) {
+              return encodedChars.split(MORSE_CODE_CHAR_SEPARATOR);
+            }
+    ).toList();
 
-    while(i < morseCode.length) {
-      String char = "";
+    String text = "";
 
-      // read char
-      while(i < morseCode.length && morseCode[i] != " ") {
-        char += morseCode[i];
-        i++;
+    for(List<String> words in morseCodeSplitByWordsAndChars) {
+      for(String encodedChar in words) {
+        text += morseCodeMap[encodedChar] ?? "";
       }
 
-      int spaceLength = 0;
-
-      // count all spaces between chars/words
-      while(i < morseCode.length && morseCode[i] == " ") {
-        spaceLength++;
-        i++;
-      }
-
-      sentence += morseCodeMap[char] ?? "";
-
-      if(spaceLength <= 1) continue;
-
-      sentence += " ";
+      text += TEXT_WORD_SEPARATOR;
     }
 
-    return sentence.trim();
+    return text.trim();
   }
 }
 
