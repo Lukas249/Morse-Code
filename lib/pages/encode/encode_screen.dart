@@ -28,7 +28,12 @@ class EncodeScreen extends StatefulWidget {
 class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderStateMixin {
   // tabs
   List<String> tabsNames = ["Chat", "Flashlight", "Vibrations", "Sound"];
-  List<IconData> tabsIcons = [Icons.chat, Icons.flashlight_on, Icons.vibration, Icons.music_note];
+  List<IconData> tabsIcons = [
+    Icons.chat,
+    Icons.flashlight_on,
+    Icons.vibration,
+    Icons.music_note
+  ];
   late final TabController _tabController =
   TabController(length: tabsNames.length, vsync: this);
 
@@ -45,11 +50,14 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
   final VibrationManager vibrationManager = VibrationManager();
 
   // transmitters
-  late final MorseCodeFlashlightTransmitter flashlightTransmitter = MorseCodeFlashlightTransmitter(flashlightManager);
-  late final MorseCodeVibrationTransmitter vibrationTransmitter = MorseCodeVibrationTransmitter(vibrationManager);
+  late final MorseCodeFlashlightTransmitter flashlightTransmitter = MorseCodeFlashlightTransmitter(
+      flashlightManager);
+  late final MorseCodeVibrationTransmitter vibrationTransmitter = MorseCodeVibrationTransmitter(
+      vibrationManager);
 
   // transmit options
-  late final Map<MorseCodeOptions, TransmitMorseCode> morseCodeTransmitOptions = {
+  late final Map<MorseCodeOptions,
+      TransmitMorseCode> morseCodeTransmitOptions = {
     MorseCodeOptions.flashlight: flashlightTransmitter,
     MorseCodeOptions.vibrations: vibrationTransmitter
   };
@@ -74,7 +82,7 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
 
   void onTabChange() {
     MorseCodeOptions selectedOption =
-        MorseCodeOptions.values[_tabController.index];
+    MorseCodeOptions.values[_tabController.index];
 
     if (morseCodeOptionsAvailability[selectedOption] == false) {
       String tabName = tabsNames[_tabController.index];
@@ -114,12 +122,12 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
 
     messagesList.add(Message(message: message, isMe: true));
     messagesList.add(Message(message: morseCode, isMe: false));
-    
+
     startTransmittingMorseCode(morseCode);
   }
 
   void startTransmittingMorseCode(morseCode) async {
-    if(!morseCodeTransmitOptions.containsKey(morseCodeOption)) {
+    if (!morseCodeTransmitOptions.containsKey(morseCodeOption)) {
       return;
     }
 
@@ -130,21 +138,28 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TabBar(
-          tabs: List.generate(
-          tabsNames.length,
-          (index) => Tab(
-            text: tabsNames[index],
-            icon: Icon(tabsIcons[index], color: Colors.lightBlue),
+        Container(
+          color: Colors.blueGrey[300],
+          child: TabBar(
+            tabs: List.generate(
+              tabsNames.length,
+                  (index) =>
+                  Tab(
+                    text: tabsNames[index],
+                    icon: Icon(tabsIcons[index], ),
+                  ),
+            ),
+            indicatorColor:  Colors.blueGrey[900],
+            labelColor:  Colors.blueGrey[900],
+            unselectedLabelColor:  Colors.blueGrey[600],
+            controller: _tabController,
           ),
-        ),
-        indicatorColor: Colors.lightBlue,
-        labelColor: Colors.lightBlue,
-        controller: _tabController,
         ),
         Expanded(
           child: BasicChat(
-              messagesList: messagesList, onSubmitMessage: onSubmitMessage),
+              messagesList: messagesList,
+              onSubmitMessage: onSubmitMessage
+          ),
         ),
       ],
     );

@@ -15,7 +15,9 @@ class SoundScreenState extends State<SoundScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      color: Colors.blueGrey[100],
+    );
   }
 
 }

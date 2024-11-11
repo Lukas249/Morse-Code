@@ -59,17 +59,21 @@ class DecodeHomeState extends State<DecodeScreen>
       length: tabsNames.length, // Number of tabs
       child: Column(
         children: [
-          TabBar(
-            tabs: List.generate(
-              tabsNames.length,
-              (index) => Tab(
-                text: tabsNames[index],
-                icon: Icon(tabsIcons[index], color: Colors.lightBlue),
+          Container(
+            color: Colors.blueGrey[300],
+            child: TabBar(
+              tabs: List.generate(
+                tabsNames.length,
+                    (index) => Tab(
+                  text: tabsNames[index],
+                  icon: Icon(tabsIcons[index]),
+                ),
               ),
+              indicatorColor:  Colors.blueGrey[900],
+              labelColor:  Colors.blueGrey[900],
+              unselectedLabelColor:  Colors.blueGrey[600],
+              controller: _tabController,
             ),
-            indicatorColor: Colors.lightBlue,
-            labelColor: Colors.lightBlue,
-            controller: _tabController,
           ),
           Expanded(
             child: TabBarView(

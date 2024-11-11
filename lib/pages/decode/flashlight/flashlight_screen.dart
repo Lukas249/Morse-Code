@@ -14,7 +14,9 @@ class FlashlightScreenState extends State<FlashlightScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      color: Colors.blueGrey[100],
+    );
   }
 
 }
