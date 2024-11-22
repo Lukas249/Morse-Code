@@ -33,6 +33,7 @@ dependencies:
   torch_light: 1.1.0
   vibration: ^1.8.4
   audioplayers: 5.0.0
+  flutter_sound: ^9.2.13
 
 
 
@@ -41,6 +42,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   fluttertoast: ^8.2.8
   camera: ^0.11.0+2
+  permission_handler: ^11.3.1
+  path_provider: ^2.1.5
+  noise_meter: ^5.0.2
 
 dev_dependencies:
   flutter_test:
