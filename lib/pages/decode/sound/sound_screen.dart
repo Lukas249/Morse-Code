@@ -72,6 +72,7 @@ class SoundScreenState extends State<SoundScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blueGrey[100],
       body: Column(
         children: [
           // Pierwszy kontener - nagłówek

@@ -16,18 +16,21 @@ class FlashlightScreen extends StatefulWidget {
 class FlashlightScreenState extends State<FlashlightScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const FlashlightCameraScreen()),
-              );
-            },
-            child: const Text("Open camera")),
-      ],
+    return Container(
+      color: Colors.blueGrey[100],
+      child: Column(
+        children: [
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const FlashlightCameraScreen()),
+                );
+              },
+              child: const Text("Open camera")),
+        ],
+      ),
     );
   }
 }
@@ -78,7 +81,7 @@ class FlashlightCameraScreenState extends State<FlashlightCameraScreen> {
 
   // decoder
   DecodeMorseCodeFlashlight decodeMorseCodeFlashlight =
-  DecodeMorseCodeFlashlight();
+      DecodeMorseCodeFlashlight();
 
   @override
   void initState() {
@@ -126,7 +129,7 @@ class FlashlightCameraScreenState extends State<FlashlightCameraScreen> {
   void dispose() {
     super.dispose();
 
-    if(controllerInitialized) {
+    if (controllerInitialized) {
       controller.stopImageStream().then((_) {
         controller.dispose();
       });
@@ -159,8 +162,8 @@ class FlashlightCameraScreenState extends State<FlashlightCameraScreen> {
 
     try {
       int averageBrightness =
-      calculateAverageBrightnessInCircle(image, _circleRadius.toInt())
-          .toInt();
+          calculateAverageBrightnessInCircle(image, _circleRadius.toInt())
+              .toInt();
 
       if (decodeMorseCodeFlashlight.isRunning) {
         decodeMorseCodeFlashlight.processCameraImage(averageBrightness, image);
@@ -234,148 +237,146 @@ class FlashlightCameraScreenState extends State<FlashlightCameraScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return SafeArea(
       child: Scaffold(
-        backgroundColor: theme.colorScheme.surface,
+        backgroundColor: Colors.blueGrey[100],
         body: controllerInitialized
             ? Stack(
-          children: [
-            Positioned.fill(
-              child: Listener(
-                onPointerDown: (_) => _pointers++,
-                onPointerUp: (_) => _pointers--,
-                child: AspectRatio(
-                  aspectRatio: controller.value.aspectRatio,
-                  child: GestureDetector(
-                    onScaleStart: _handleScaleStart,
-                    onScaleUpdate: _handleScaleUpdate,
-                    child: CameraPreview(
-                      controller,
+                children: [
+                  Positioned.fill(
+                    child: Listener(
+                      onPointerDown: (_) => _pointers++,
+                      onPointerUp: (_) => _pointers--,
+                      child: AspectRatio(
+                        aspectRatio: controller.value.aspectRatio,
+                        child: GestureDetector(
+                          onScaleStart: _handleScaleStart,
+                          onScaleUpdate: _handleScaleUpdate,
+                          child: CameraPreview(
+                            controller,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: _circleRadius * 2 * _currentCircleScale,
+                      width: _circleRadius * 2 * _currentCircleScale,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: Colors.white,
+                          )),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: const BoxDecoration(
+                          color: Color.fromRGBO(0, 0, 0, 0.7)),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          decodeMorseCodeFlashlight.decodedText.trim() != ""
+                              ? Container(
+                                  width: double.infinity,
+                                  constraints:
+                                      const BoxConstraints(maxHeight: 100),
+                                  padding: const EdgeInsets.all(10),
+                                  margin: const EdgeInsets.only(bottom: 10),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: SelectionArea(
+                                      child: Text(
+                                        decodeMorseCodeFlashlight.decodedText,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      "Luminance",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      _averageBrightness.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ), //
+                                  ],
+                                ), // Left element which can change in size
+                              ),
+                              Flexible(
+                                flex: 0,
+                                child: isRecording
+                                    ? StopRecordingButton(onStopRecording)
+                                    : StartRecordingButton(onStartRecording),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      "Zoom",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      _currentCameraScale.toStringAsFixed(1),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ), //
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: const Center(
+                  child: SizedBox(
+                    height: 40,
+                    width: 40,
+                    child: CircularProgressIndicator(
+                      color: Colors.lightBlue,
                     ),
                   ),
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                height: _circleRadius * 2 * _currentCircleScale,
-                width: _circleRadius * 2 * _currentCircleScale,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: Colors.white,
-                    )),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                decoration: const BoxDecoration(
-                    color: Color.fromRGBO(0, 0, 0, 0.7)),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    decodeMorseCodeFlashlight.decodedText.trim() != ""
-                        ? Container(
-                      width: double.infinity,
-                      constraints:
-                      const BoxConstraints(maxHeight: 100),
-                      padding: const EdgeInsets.all(10),
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: SelectionArea(
-                          child: Text(
-                            decodeMorseCodeFlashlight.decodedText,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    )
-                        : Container(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          fit: FlexFit.tight,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
-                                "Luminance",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                _averageBrightness.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ), //
-                            ],
-                          ), // Left element which can change in size
-                        ),
-                        Flexible(
-                          flex: 0,
-                          child: isRecording
-                              ? StopRecordingButton(onStopRecording)
-                              : StartRecordingButton(onStartRecording),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          fit: FlexFit.tight,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
-                                "Zoom",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                _currentCameraScale.toStringAsFixed(1),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ), //
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        )
-            : Container(
-          width: double.infinity,
-          height: double.infinity,
-          child: const Center(
-            child: SizedBox(
-              height: 40,
-              width: 40,
-              child: CircularProgressIndicator(
-                color: Colors.lightBlue,
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -388,7 +389,7 @@ Widget StartRecordingButton(void Function() onStartRecording) {
     child: TextButton(
       style: ButtonStyle(
         backgroundColor:
-        WidgetStateProperty.all<Color>(Colors.white), // White background
+            WidgetStateProperty.all<Color>(Colors.white), // White background
         shape: WidgetStateProperty.all<OutlinedBorder>(
           const CircleBorder(), // Circular button
         ),
@@ -413,7 +414,7 @@ Widget StopRecordingButton(void Function() onStopRecording) {
     child: TextButton(
       style: ButtonStyle(
         backgroundColor:
-        WidgetStateProperty.all<Color>(Colors.white), // White background
+            WidgetStateProperty.all<Color>(Colors.white), // White background
         shape: WidgetStateProperty.all<OutlinedBorder>(
           const CircleBorder(), // Circular button
         ),
