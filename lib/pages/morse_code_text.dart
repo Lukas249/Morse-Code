@@ -118,18 +118,24 @@ class MorseCodeText  {
 
     List<List<String>> morseCodeSplitByWordsAndChars = morseCodeSplitByWords.map(
             (String encodedChars) {
-              return encodedChars.split(MORSE_CODE_CHAR_SEPARATOR);
-            }
+          return encodedChars.split(MORSE_CODE_CHAR_SEPARATOR);
+        }
     ).toList();
 
     String text = "";
 
     for(List<String> words in morseCodeSplitByWordsAndChars) {
+      String word = "";
+
       for(String encodedChar in words) {
-        text += morseCodeMap[encodedChar] ?? "";
+        word += morseCodeMap[encodedChar] ?? "";
       }
 
-      text += TEXT_WORD_SEPARATOR;
+      text += word;
+
+      if(word != "") {
+        text += TEXT_WORD_SEPARATOR;
+      }
     }
 
     return text.trim();

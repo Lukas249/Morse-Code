@@ -19,12 +19,13 @@ class _NavigationState extends State<Navigation> {
 
     return Scaffold(
       bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.blueGrey[300],
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.lightBlue,
+        indicatorColor: Colors.white12,
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
