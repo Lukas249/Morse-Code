@@ -30,15 +30,12 @@ class BasicChatState extends State<BasicChat> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Container(
         padding: const  EdgeInsets.symmetric(
           vertical: 15.0,
           horizontal: 10.0,
-
-        ),
-
-        decoration: BoxDecoration(
-          color: Colors.blueGrey[100]
         ),
         child: Flex(
           direction: Axis.vertical,
@@ -50,23 +47,18 @@ class BasicChatState extends State<BasicChat> {
               ),
             ),
             TextField(
-
               controller: _textEditingController,
               textAlignVertical: TextAlignVertical.center,
-
               onEditingComplete: () {
                 submitMessage(context);
               },
               decoration: InputDecoration(
-                hintText: " enter your message here...",
+                hintText: "Enter your message here...",
                 filled: true,
-                fillColor: Colors.blueGrey[200],
+                fillColor: theme.colorScheme.onSurface.withOpacity(0.1),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(24),
-
-
-
                 ),
                 contentPadding: const EdgeInsets.symmetric(
                        vertical: 20.0,

@@ -8,8 +8,11 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ThemeProvider>(context);
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: theme.scaffoldBackgroundColor,
         title: const Text('Settings'),
       ),
       body: Center(

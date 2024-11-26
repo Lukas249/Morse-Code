@@ -60,7 +60,6 @@ class DecodeHomeState extends State<DecodeScreen>
       child: Column(
         children: [
           Container(
-            color: Colors.blueGrey[300],
             child: TabBar(
               tabs: List.generate(
                 tabsNames.length,
@@ -69,9 +68,7 @@ class DecodeHomeState extends State<DecodeScreen>
                   icon: Icon(tabsIcons[index]),
                 ),
               ),
-              indicatorColor:  Colors.blueGrey[900],
-              labelColor:  Colors.blueGrey[900],
-              unselectedLabelColor:  Colors.blueGrey[600],
+              dividerColor: Colors.transparent,
               controller: _tabController,
             ),
           ),

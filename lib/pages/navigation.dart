@@ -16,31 +16,32 @@ class _NavigationState extends State<Navigation> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
     return Scaffold(
       bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.blueGrey[300],
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.white12,
+        backgroundColor: theme.colorScheme.onSurface.withOpacity(0.1),
+        indicatorColor: theme.colorScheme.primary,
         selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
-            icon: Icon(Icons.arrow_circle_up_rounded, color: Colors.black),
-            selectedIcon: Icon(Icons.arrow_circle_up_rounded, color: Colors.white),
+            icon: const Icon(Icons.arrow_circle_up_rounded),
+            selectedIcon: Icon(Icons.arrow_circle_up_rounded, color: theme.colorScheme.onPrimary,),
             label: 'Encode',
           ),
           NavigationDestination(
-            icon: Icon(Icons.arrow_circle_down_rounded, color: Colors.black),
-            selectedIcon: Icon(Icons.arrow_circle_down_rounded, color: Colors.white),
+            icon: const Icon(Icons.arrow_circle_down_rounded),
+            selectedIcon: Icon(Icons.arrow_circle_down_rounded, color: theme.colorScheme.onPrimary),
             label: 'Decode',
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings, color: Colors.black),
-            selectedIcon: Icon(Icons.settings, color: Colors.white),
+            icon: const Icon(Icons.settings),
+            selectedIcon: Icon(Icons.settings, color: theme.colorScheme.onPrimary),
             label: 'Settings',
           ),
         ],

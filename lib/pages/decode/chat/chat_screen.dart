@@ -24,12 +24,8 @@ class ChatScreenState extends State<ChatScreen> {
     if (!MorseCodeText.isValidMorseCode(message) || decodedMorseCode.trim() == "") {
       Fluttertoast.showToast(
           msg: "Message must contain correct sequence of dots, dashes and spaces",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 2,
-          backgroundColor: Colors.grey,
-          textColor: Colors.white,
-          fontSize: 16.0);
+          toastLength: Toast.LENGTH_SHORT
+      );
 
       return;
     }

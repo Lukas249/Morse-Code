@@ -71,8 +71,9 @@ class SoundScreenState extends State<SoundScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.blueGrey[100],
       body: Column(
         children: [
           // Pierwszy kontener - nagłówek
@@ -81,15 +82,14 @@ class SoundScreenState extends State<SoundScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(16.0),
               margin: const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                color: Colors.blueGrey[300],
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Center(
                 child: Text(
                   "${_currentDecibels.toStringAsFixed(1)} dB",
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurface,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -106,24 +106,16 @@ class SoundScreenState extends State<SoundScreen> {
               margin: const EdgeInsets.all(10.0),
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.blueGrey[100],
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+                  borderRadius: BorderRadius.circular(20),
+                  color: theme.colorScheme.onSurface.withOpacity(0.1)
               ),
               child: Center(
                 child: SingleChildScrollView(
                   child: Text(
                     _decodedText,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
-                      color: Colors.black87,
+                      color: theme.colorScheme.onSurface,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -139,8 +131,8 @@ class SoundScreenState extends State<SoundScreen> {
               margin: const EdgeInsets.all(10.0),
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.blueGrey[300],
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  color: theme.colorScheme.onSurface.withOpacity(0.1)
               ),
               child: Center(
                 child: IconButton(
@@ -148,7 +140,7 @@ class SoundScreenState extends State<SoundScreen> {
                   icon: Icon(
                     _isRecording ? Icons.stop : Icons.mic,
                     size: 50,
-                    color: _isRecording ? Colors.red : Colors.white,
+                    color: _isRecording ? theme.colorScheme.error : theme.colorScheme.primary,
                   ),
                   tooltip: _isRecording
                       ? "Stop Recording"

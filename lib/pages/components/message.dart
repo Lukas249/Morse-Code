@@ -9,6 +9,8 @@ class Message extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -29,11 +31,12 @@ class Message extends StatelessWidget {
                   topLeft: Radius.circular(5),
                   topRight: Radius.circular(5)
               ),
-              color: isMe ? Colors.lightBlue : Colors.grey),
+              color: isMe ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.1)
+          ),
           child: Text(
             message,
             softWrap: true,
-            style: const TextStyle(fontSize: 25, color: Colors.white),
+            style: TextStyle(fontSize: 25, color: isMe ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface),
           ),
         ),
       ],
