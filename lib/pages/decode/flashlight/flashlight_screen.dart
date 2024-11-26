@@ -16,21 +16,16 @@ class FlashlightScreen extends StatefulWidget {
 class FlashlightScreenState extends State<FlashlightScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blueGrey[100],
-      child: Column(
-        children: [
-          TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FlashlightCameraScreen()),
-                );
-              },
-              child: const Text("Open camera")),
-        ],
-      ),
+    return Center(
+      child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const FlashlightCameraScreen()),
+            );
+          },
+          child: const Text("Open camera")),
     );
   }
 }
@@ -239,7 +234,6 @@ class FlashlightCameraScreenState extends State<FlashlightCameraScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.blueGrey[100],
         body: controllerInitialized
             ? Stack(
                 children: [
