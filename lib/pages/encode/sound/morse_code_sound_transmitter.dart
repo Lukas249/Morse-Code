@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import '../transmit_morse_code.dart';
 import 'sound_manager.dart';
 
@@ -14,22 +13,22 @@ class MorseCodeSoundTransmitter extends TransmitMorseCode {
 
   static int timeGapBetweenWords = dotTimeInMilliseconds * 7;
 
-  final AudioPlayer player;
+  SoundManager soundManager;
 
-  MorseCodeSoundTransmitter(this.player);
+  MorseCodeSoundTransmitter(this.soundManager);
 
   @override
   Future<void> transmitDot() async {
-    await player.play(AssetSource("beep.mp3"));
+    await soundManager.play();
     await Future.delayed(Duration(milliseconds: dotTimeInMilliseconds));
-    await player.stop();
+    await soundManager.stop();
   }
 
   @override
   Future<void> transmitDash() async {
-    await player.play(AssetSource("beep.mp3"));
+    await soundManager.play();
     await Future.delayed(Duration(milliseconds: dashTimeInMilliseconds));
-    await player.stop();
+    await soundManager.stop();
   }
 
   @override
