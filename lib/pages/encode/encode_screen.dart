@@ -1,9 +1,12 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:morse_code/pages/components/basic_chat.dart';
 
 import 'package:morse_code/pages/components/message.dart';
+import 'package:morse_code/pages/encode/sound/morse_code_sound_transmitter.dart';
+import 'package:morse_code/pages/encode/sound/sound_manager.dart';
 
 import 'package:morse_code/pages/encode/transmit_morse_code.dart';
 import 'package:morse_code/pages/encode/vibrations/vibration_manager.dart';
@@ -45,21 +48,27 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     MorseCodeOptions.sound: true,
   };
 
+  final player = AudioPlayer();
+
   // managers
   final FlashlightManager flashlightManager = FlashlightManager();
   final VibrationManager vibrationManager = VibrationManager();
+  late final SoundManager soundManager = SoundManager(player);
 
   // transmitters
   late final MorseCodeFlashlightTransmitter flashlightTransmitter = MorseCodeFlashlightTransmitter(
       flashlightManager);
   late final MorseCodeVibrationTransmitter vibrationTransmitter = MorseCodeVibrationTransmitter(
       vibrationManager);
+  late final MorseCodeSoundTransmitter soundTransmitter = MorseCodeSoundTransmitter(
+      soundManager);
 
   // transmit options
   late final Map<MorseCodeOptions,
       TransmitMorseCode> morseCodeTransmitOptions = {
     MorseCodeOptions.flashlight: flashlightTransmitter,
-    MorseCodeOptions.vibrations: vibrationTransmitter
+    MorseCodeOptions.vibrations: vibrationTransmitter,
+    MorseCodeOptions.sound: soundTransmitter
   };
 
   // currently selected option
@@ -72,11 +81,20 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
   void initState() {
     super.initState();
     _tabController.addListener(onTabChange);
+    initPlayer();
+  }
+
+  void initPlayer() async {
+    await player.setPlayerMode(PlayerMode.lowLatency);
+    await player.setReleaseMode(ReleaseMode.loop);
+    await player.setVolume(0.5);
+    await player.setSourceAsset("beep.mp3");
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    player.dispose();
     super.dispose();
   }
 
@@ -89,12 +107,8 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
 
       Fluttertoast.showToast(
           msg: "$tabName seems not available now.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.grey,
-          textColor: Colors.white,
-          fontSize: 16.0);
+          toastLength: Toast.LENGTH_SHORT
+      );
 
       _tabController.index = _tabController.previousIndex;
 
@@ -110,12 +124,8 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     if (morseCode.trim() == "") {
       Fluttertoast.showToast(
           msg: "Message must contain alphanumerical characters",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 2,
-          backgroundColor: Colors.grey,
-          textColor: Colors.white,
-          fontSize: 16.0);
+          toastLength: Toast.LENGTH_SHORT
+      );
 
       return;
     }
@@ -139,7 +149,6 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     return Column(
       children: [
         Container(
-          color: Colors.blueGrey[300],
           child: TabBar(
             tabs: List.generate(
               tabsNames.length,
@@ -149,10 +158,8 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
                     icon: Icon(tabsIcons[index], ),
                   ),
             ),
-            indicatorColor:  Colors.blueGrey[900],
-            labelColor:  Colors.blueGrey[900],
-            unselectedLabelColor:  Colors.blueGrey[600],
             controller: _tabController,
+            dividerColor: Colors.transparent,
           ),
         ),
         Expanded(
