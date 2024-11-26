@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:morse_code/provider/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'pages/navigation.dart';
 
 void main() {
@@ -10,9 +12,15 @@ class MorseCodeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      home: const SafeArea(child: Navigation()),
+    return ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      builder: (context, child) {
+        final provider = Provider.of<ThemeProvider>(context);
+        return MaterialApp(
+          theme: provider.theme,
+          home: const SafeArea(child: Navigation())
+        );
+      },
     );
   }
 }
