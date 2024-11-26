@@ -1,19 +1,22 @@
 import 'package:audioplayers/audioplayers.dart';
 
 abstract class SoundManagerAbstract{
-  Future<void> turnOnSound();
-  Future<void> turnOffSound();
+  Future<void> play();
+  Future<void> stop();
 }
 
 class SoundManager implements SoundManagerAbstract {
-  final player = AudioPlayer();
- // String source = "beep.mp3";
+  AudioPlayer player;
+
+  SoundManager(this.player);
+
   @override
-  Future<void> turnOnSound() async{
-    await player.play(AssetSource("beep.mp3"));
+  Future<void> play() async {
+    await player.resume();
   }
+
   @override
-  Future<void> turnOffSound() async {
+  Future<void> stop() async {
     await player.stop();
   }
 }
