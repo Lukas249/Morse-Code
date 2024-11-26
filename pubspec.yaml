@@ -30,10 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  torch_light: 1.1.0
+  torch_light: ^1.1.0
   vibration: ^1.8.4
-  audioplayers: 5.0.0
-  flutter_sound: ^9.2.13
+  audioplayers: ^6.1.0
+  flutter_sound: ^9.17.0
 
 
 
