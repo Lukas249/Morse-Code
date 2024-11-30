@@ -83,7 +83,8 @@ class SoundScreenState extends State<SoundScreen> {
               padding: const EdgeInsets.all(16.0),
               margin: const EdgeInsets.all(10.0),
               decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: Colors.transparent
               ),
               child: Center(
                 child: Text(
@@ -130,9 +131,9 @@ class SoundScreenState extends State<SoundScreen> {
               width: double.infinity,
               margin: const EdgeInsets.all(10.0),
               padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  color: theme.colorScheme.onSurface.withOpacity(0.1)
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: Colors.transparent
               ),
               child: Center(
                 child: IconButton(

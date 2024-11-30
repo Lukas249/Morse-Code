@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
 
+
 ThemeData lightTheme = ThemeData.light().copyWith(
-    colorScheme: const ColorScheme.light().copyWith(
-        primary: Colors.lightBlue,
-        onPrimary: Colors.white,
-    ),
-    iconTheme: const IconThemeData(
-      color: Colors.black
-    )
+  colorScheme: const ColorScheme.light().copyWith(
+    primary: Colors.blueGrey[600],
+    onPrimary: Colors.blueGrey[50],
+    onSurface: Colors.blueGrey[600],
+  ),
+  scaffoldBackgroundColor: Colors.blueGrey[100],
+  iconTheme: const IconThemeData(
+    color: Colors.black,
+  ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Colors.blueGrey[400],
+    foregroundColor: Colors.black45
+  ),
 );
 
 ThemeData darkTheme = ThemeData.dark().copyWith(
-    colorScheme: const ColorScheme.dark().copyWith(
-        primary: Colors.lightBlue,
-        onPrimary: Colors.white,
-    ),
-    iconTheme: const IconThemeData(
-      color: Colors.white
-    )
+  colorScheme: const ColorScheme.dark().copyWith(
+    primary: Colors.blueGrey[800],
+    onPrimary: Colors.blueGrey[400],
+    onSurface: Colors.blueGrey[800],
+  ),
+  scaffoldBackgroundColor: Colors.black45,
+  iconTheme: const IconThemeData(
+    color: Colors.white,
+  ),
+  floatingActionButtonTheme:  FloatingActionButtonThemeData(
+    backgroundColor: Colors.blueGrey[800],
+    foregroundColor: Colors.white70
+  ),
 );
 
 class ThemeProvider extends ChangeNotifier {

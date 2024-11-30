@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+
 class BasicChat extends StatefulWidget {
   final List<Widget> messagesList;
   final Function(String) onSubmitMessage;
@@ -67,7 +69,7 @@ class BasicChatState extends State<BasicChat> {
                     onPressed: () {
                       submitMessage(context);
                     },
-                    icon: const Icon(Icons.send)),
+                  icon: Icon(Icons.send, color: theme.colorScheme.primary)),
               ),
             ),
           ],
