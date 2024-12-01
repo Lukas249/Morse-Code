@@ -7,19 +7,12 @@ import '../../morse_code_text.dart';
 import 'package:noise_meter/noise_meter.dart';
 import '../../encode/flashlight/morse_code_flashlight_transmitter.dart';
 
-enum SoundLevel { quiet, noisy }
-
 class DecodeMorseCodeSound {
   // Statusy nagrywania i poziomu decybeli
   bool _isRecording = false;
-  NoiseReading? _latestReading;
   StreamSubscription<NoiseReading>? _noiseSubscription;
   NoiseMeter? _noiseMeter;
-  SoundLevel soundLevel = SoundLevel.quiet;
-
-  // Progi decybeli
-  final double quietThreshold = 50.0; // Granica ciszy
-  final double noiseThreshold = 75.0; // Granica hałasu
+  int noiseDetect = 64;
 
   // Stopwatch do analizy czasu
   final Stopwatch _stopwatch = Stopwatch();
@@ -73,9 +66,8 @@ class DecodeMorseCodeSound {
     );
 
     _isRecording = true;
-    _stopwatch.start();
-    // Rozpoczęcie monitorowania poziomu decybeli
     _startNoiseMeter();
+    _stopwatch.start();
   }
 
   // Zatrzymanie nagrywania
@@ -99,8 +91,53 @@ class DecodeMorseCodeSound {
   void _startNoiseMeter() {
     if (_noiseMeter == null) return;
 
+    bool isSignalActive = false; // Czy sygnał jest obecnie aktywny
+    int signalStartTime = 0; // Czas rozpoczęcia sygnału
+    int silenceStartTime = 0; // Czas rozpoczęcia ciszy
+    int margin = 40;
+
     _noiseSubscription = _noiseMeter!.noise.listen((NoiseReading reading) {
-      _analyzeDecibels(reading.meanDecibel);
+      final currentTime = _stopwatch.elapsedMilliseconds;
+
+      if (reading.meanDecibel >= noiseDetect) {
+        // Dźwięk przekroczył próg
+        if (!isSignalActive) {
+          // Rozpoczęcie nowego sygnału
+          isSignalActive = true;
+          signalStartTime = currentTime;
+
+          // Analiza czasu ciszy
+          if (silenceStartTime > 0) {
+            int silenceDuration = currentTime - silenceStartTime;
+
+            if (silenceDuration >= MorseCodeFlashlightTransmitter.timeGapBetweenWords - margin*3) {
+              _morseCode += "    "; // Przerwa między słowami
+            } else if (silenceDuration >= MorseCodeFlashlightTransmitter.timeGapBetweenChars - margin*7) {
+              _morseCode += " "; // Przerwa między znakami
+            }
+            else
+              {
+                _morseCode += "";
+              }
+          }
+        }
+      } else {
+        // Cisza
+        if (isSignalActive) {
+          // Zakończenie sygnału
+          isSignalActive = false;
+          int signalDuration = currentTime - signalStartTime;
+
+          if (signalDuration <= MorseCodeFlashlightTransmitter.dotTimeInMilliseconds * 2) {
+            _morseCode += "."; // Dodaj kropkę
+          } else {
+            _morseCode += "-"; // Dodaj kreskę
+          }
+
+          // Rozpoczęcie liczenia ciszy
+          silenceStartTime = currentTime;
+        }
+      }
     });
   }
 
@@ -109,37 +146,4 @@ class DecodeMorseCodeSound {
     _noiseSubscription?.cancel();
     _noiseSubscription = null;
   }
-
-  // Analiza decybeli i dodanie odpowiednich znaków do kodu Morse'a
-  void _analyzeDecibels(double db) {
-    double currentDecibels = db;
-
-    // Przejście do stanu hałasu
-    if (currentDecibels >= noiseThreshold && soundLevel == SoundLevel.quiet) {
-      int elapsed = _stopwatch.elapsedMilliseconds;
-
-      if (elapsed <= MorseCodeFlashlightTransmitter.dotTimeInMilliseconds) {
-        _morseCode += "."; // Krótki sygnał
-      } else {
-        _morseCode += "-"; // Długi sygnał
-      }
-
-      soundLevel = SoundLevel.noisy;
-      _stopwatch.reset();
-    }
-    // Przejście do stanu ciszy
-    else if (currentDecibels < quietThreshold && soundLevel == SoundLevel.noisy) {
-      int elapsed = _stopwatch.elapsedMilliseconds;
-
-      if (elapsed >= MorseCodeFlashlightTransmitter.timeGapBetweenWords) {
-        _morseCode += "     "; // Przerwa między słowami
-      } else if (elapsed >= MorseCodeFlashlightTransmitter.timeGapBetweenChars) {
-        _morseCode += " "; // Przerwa między znakami
-      }
-
-      soundLevel = SoundLevel.quiet;
-      _stopwatch.reset();
-    }
-  }
-
 }

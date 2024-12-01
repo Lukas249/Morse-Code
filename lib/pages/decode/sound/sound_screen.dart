@@ -16,7 +16,6 @@ class SoundScreenState extends State<SoundScreen> {
   final DecodeMorseCodeSound _morseDecoder = DecodeMorseCodeSound();
   bool _isRecording = false; // Status nagrywania
   double _currentDecibels = 0.0; // Poziom decybeli
-  String _decodedText = ""; // Dekodowany tekst w czasie rzeczywistym
 
   late NoiseMeter _noiseMeter;
   StreamSubscription<NoiseReading>? _noiseSubscription;
@@ -39,7 +38,6 @@ class SoundScreenState extends State<SoundScreen> {
     _noiseSubscription = _noiseMeter.noise.listen((NoiseReading reading) {
       setState(() {
         _currentDecibels = reading.meanDecibel; // Aktualizacja poziomu decybeli
-        _decodedText = _morseDecoder.decodedText; // Aktualizacja dekodowanego tekstu
       });
     });
   }
@@ -112,7 +110,7 @@ class SoundScreenState extends State<SoundScreen> {
               child: Center(
                 child: SingleChildScrollView(
                   child: Text(
-                    _decodedText,
+                    _morseDecoder.decodedText.trim(),
                     style: TextStyle(
                       fontSize: 18,
                       color: theme.colorScheme.onSurface,
