@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:morse_code/pages/components/basic_chat.dart';
 
@@ -71,11 +70,14 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     MorseCodeOptions.sound: soundTransmitter
   };
 
+
   // currently selected option
   MorseCodeOptions morseCodeOption = MorseCodeOptions.chat;
 
   // messages history
   List<Message> messagesList = [];
+
+
 
   @override
   void initState() {
@@ -148,6 +150,7 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // TabBar
         Container(
           child: TabBar(
             tabs: List.generate(
@@ -155,17 +158,41 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
                   (index) =>
                   Tab(
                     text: tabsNames[index],
-                    icon: Icon(tabsIcons[index], ),
+                    icon: Icon(
+                      tabsIcons[index],
+                    ),
                   ),
             ),
             controller: _tabController,
             dividerColor: Colors.transparent,
           ),
         ),
+        // Loop button below the TabBar
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Align(
+            alignment: Alignment.topRight,
+            child: FloatingActionButton(
+              onPressed: () {
+                morseCodeTransmitOptions[morseCodeOption]?.stopTransmission();
+              },
+
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(70)
+              ),
+              mini: true,
+              child: const Icon(
+                Icons.stop,
+                size: 29,
+              ),
+            ),
+          ),
+        ),
+        // Expanded chat section below the Loop button
         Expanded(
           child: BasicChat(
-              messagesList: messagesList,
-              onSubmitMessage: onSubmitMessage
+            messagesList: messagesList,
+            onSubmitMessage: onSubmitMessage,
           ),
         ),
       ],
