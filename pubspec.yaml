@@ -48,7 +48,6 @@ dependencies:
   noise_meter: ^5.0.2
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.14.1
   flutter_test:
     sdk: flutter
 
@@ -65,12 +64,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
-flutter_launcher_icons:
-  image_path: "images/morse-code-logo.png"
-  android: true
-  ios: true
-  remove_alpha_ios: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

@@ -358,10 +358,10 @@ class FlashlightCameraScreenState extends State<FlashlightCameraScreen> {
                   ),
                 ],
               )
-            : const SizedBox(
+            : Container(
                 width: double.infinity,
                 height: double.infinity,
-                child: Center(
+                child: const Center(
                   child: SizedBox(
                     height: 40,
                     width: 40,
@@ -377,7 +377,7 @@ class FlashlightCameraScreenState extends State<FlashlightCameraScreen> {
 }
 
 Widget StartRecordingButton(void Function() onStartRecording) {
-  return SizedBox(
+  return Container(
     width: 60, // Width of the inner circle
     height: 60,
     child: TextButton(
@@ -402,7 +402,7 @@ Widget StartRecordingButton(void Function() onStartRecording) {
 }
 
 Widget StopRecordingButton(void Function() onStopRecording) {
-  return SizedBox(
+  return Container(
     width: 60, // Width of the inner circle
     height: 60,
     child: TextButton(
