@@ -2,6 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:morse_code/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 
+// loop option
+int loop = 1;
+void _showErrorDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Błąd"),
+      content: Text("Podaj poprawną liczbę!"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text("OK"),
+        ),
+      ],
+    ),
+  );
+}
+// loop option
+
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
@@ -53,6 +72,21 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          TextField(
+            style: TextStyle(fontSize: 20),
+            decoration: const InputDecoration(
+              label: Text('  Loop', style: TextStyle(fontSize: 20, ),),
+            ),
+            onSubmitted: (value){
+                try {
+                  loop = int.parse(value);
+                }
+                catch (e) {
+                  loop = 1;
+                  _showErrorDialog(context);
+                }
+            },
           ),
           const SizedBox(
               height: 10), // Add spacing between buttons and container
