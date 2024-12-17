@@ -4,6 +4,7 @@ import 'package:morse_code/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'pages/navigation.dart';
 
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 

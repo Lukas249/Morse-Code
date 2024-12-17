@@ -2,6 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:morse_code/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 
+// loop option
+int loop = 1;
+void _showErrorDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Błąd"),
+      content: Text("Podaj poprawną liczbę!"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text("OK"),
+        ),
+      ],
+    ),
+  );
+}
+// loop option
+
 final List<Map<String, dynamic>> textSections = [
   {
     'text': "Instructions:",
@@ -51,6 +70,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<ThemeProvider>(context);
     final theme = Theme.of(context);
+    TextEditingController _controller = TextEditingController(text: loop.toString());
 
     return Scaffold(
       body: ListView(
@@ -71,6 +91,22 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
           ), // Add spacing between buttons and container
+          TextField(
+            controller: _controller,
+            style: TextStyle(fontSize: 20),
+            decoration: const InputDecoration(
+              label: Text('  Loop', style: TextStyle(fontSize: 20, ),),
+            ),
+            onSubmitted: (value){
+              try {
+                loop = int.parse(value);
+              }
+              catch (e) {
+                loop = 1;
+                _showErrorDialog(context);
+              }
+            },
+          ),
           Container(
             width: double.infinity,
             margin: const EdgeInsets.all(10.0),

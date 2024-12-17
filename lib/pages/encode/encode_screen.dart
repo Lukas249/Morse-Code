@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,8 +15,7 @@ import '../morse_code_text.dart';
 import 'package:morse_code/pages/encode/flashlight/flashlight_manager.dart';
 import 'package:morse_code/pages/encode/flashlight/morse_code_flashlight_transmitter.dart';
 import 'vibrations/morse_code_vibration_transmitter.dart';
-
-
+import 'package:morse_code/pages/settings/settings_screen.dart';
 
 enum MorseCodeOptions { chat, flashlight, vibrations, sound }
 
@@ -136,10 +137,10 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     messagesList.add(Message(message: message, isMe: true));
     messagesList.add(Message(message: morseCode, isMe: false));
 
-    startTransmittingMorseCode(morseCode);
+    startTransmittingMorseCode(morseCode,loop);
   }
 
-  void startTransmittingMorseCode(morseCode) async {
+  void startTransmittingMorseCode(morseCode, loop) async {
     if (!morseCodeTransmitOptions.containsKey(morseCodeOption)) {
       return;
     }
@@ -147,7 +148,12 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     setState(() {
       isTransmitting = true;
     });
-    await morseCodeTransmitOptions[morseCodeOption]?.transmit(morseCode);
+
+    for (int i = 0; i < loop; i++) {
+      await morseCodeTransmitOptions[morseCodeOption]?.transmit(morseCode);
+      sleep(const Duration(seconds: 1));
+    }
+
     setState(() {
       isTransmitting = false;
     });
@@ -181,7 +187,6 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
             dividerColor: Colors.transparent,
           ),
         ),
-        // Expanded chat section below the Loop button
         Expanded(
           child: BasicChat(
               messagesList: messagesList,
