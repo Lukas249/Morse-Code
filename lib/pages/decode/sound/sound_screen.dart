@@ -88,7 +88,7 @@ class SoundScreenState extends State<SoundScreen> {
                 child: Text(
                   "${_currentDecibels.toStringAsFixed(1)} dB",
                   style: TextStyle(
-                    color: theme.colorScheme.onSurface,
+                    color: theme.colorScheme.primary,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),

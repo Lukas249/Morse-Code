@@ -116,9 +116,9 @@ class DecodeMorseCodeSound {
               _morseCode += " "; // Przerwa między znakami
             }
             else
-              {
-                _morseCode += "";
-              }
+            {
+              _morseCode += "";
+            }
           }
         }
       } else {

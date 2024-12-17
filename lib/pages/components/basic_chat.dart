@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
 
-
-
 class BasicChat extends StatefulWidget {
   final List<Widget> messagesList;
   final Function(String) onSubmitMessage;
+  bool isTransmitting;
+  final Function onTransmissionEnd;
 
-  const BasicChat({super.key, required this.messagesList, required this.onSubmitMessage});
+  BasicChat(
+      {super.key,
+        required this.messagesList,
+        required this.onSubmitMessage,
+        required this.isTransmitting,
+        required this.onTransmissionEnd});
 
   @override
   State<StatefulWidget> createState() {
     return BasicChatState();
   }
-
 }
 
 class BasicChatState extends State<BasicChat> {
   final TextEditingController _textEditingController = TextEditingController();
+
+  void onPressSendButton(BuildContext context) {
+    if (widget.isTransmitting) {
+      setState(() {
+        widget.isTransmitting = false;
+      });
+      widget.onTransmissionEnd();
+      return;
+    }
+
+    submitMessage(context);
+  }
 
   void submitMessage(BuildContext context) {
     widget.onSubmitMessage(_textEditingController.text);
@@ -33,9 +49,10 @@ class BasicChatState extends State<BasicChat> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
-    return Container(
-        padding: const  EdgeInsets.symmetric(
+
+    return SelectionArea(
+      child: Container(
+        padding: const EdgeInsets.symmetric(
           vertical: 15.0,
           horizontal: 10.0,
         ),
@@ -52,7 +69,7 @@ class BasicChatState extends State<BasicChat> {
               controller: _textEditingController,
               textAlignVertical: TextAlignVertical.center,
               onEditingComplete: () {
-                submitMessage(context);
+                onPressSendButton(context);
               },
               decoration: InputDecoration(
                 hintText: "Enter your message here...",
@@ -63,18 +80,25 @@ class BasicChatState extends State<BasicChat> {
                   borderRadius: BorderRadius.circular(24),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
-                       vertical: 20.0,
-                       horizontal: 20.0, ),
+                  vertical: 20.0,
+                  horizontal: 20.0,
+                ),
                 suffixIcon: IconButton(
                     onPressed: () {
-                      submitMessage(context);
+                      onPressSendButton(context);
                     },
-                  icon: Icon(Icons.send, color: theme.colorScheme.primary)),
+                    icon: widget.isTransmitting
+                        ? Icon(
+                      Icons.stop_rounded,
+                      color: theme.colorScheme.primary,
+                      size: 35,
+                    )
+                        : Icon(Icons.send, color: theme.colorScheme.primary)),
               ),
             ),
           ],
         ),
-      );
+      ),
+    );
   }
-
 }

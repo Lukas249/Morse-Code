@@ -36,9 +36,12 @@ class ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-     return BasicChat(
-         messagesList: _messagesList,
-         onSubmitMessage: onSubmitMessage);
+    return BasicChat(
+      messagesList: _messagesList,
+      onSubmitMessage: onSubmitMessage,
+      isTransmitting: false,
+      onTransmissionEnd: () {},
+    );
   }
 
 }

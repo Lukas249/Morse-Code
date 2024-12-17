@@ -70,6 +70,7 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
     MorseCodeOptions.sound: soundTransmitter
   };
 
+  bool isTransmitting = false;
 
   // currently selected option
   MorseCodeOptions morseCodeOption = MorseCodeOptions.chat;
@@ -89,7 +90,7 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
   void initPlayer() async {
     await player.setPlayerMode(PlayerMode.lowLatency);
     await player.setReleaseMode(ReleaseMode.loop);
-    await player.setVolume(0.5);
+    await player.setVolume(1);
     await player.setSourceAsset("beep.mp3");
   }
 
@@ -143,7 +144,20 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
       return;
     }
 
+    setState(() {
+      isTransmitting = true;
+    });
     await morseCodeTransmitOptions[morseCodeOption]?.transmit(morseCode);
+    setState(() {
+      isTransmitting = false;
+    });
+  }
+
+  void onTransmissionEnd() {
+    morseCodeTransmitOptions[morseCodeOption]?.stopTransmission();
+    setState(() {
+      isTransmitting = false;
+    });
   }
 
   @override
@@ -167,32 +181,13 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
             dividerColor: Colors.transparent,
           ),
         ),
-        // Loop button below the TabBar
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Align(
-            alignment: Alignment.topRight,
-            child: FloatingActionButton(
-              onPressed: () {
-                morseCodeTransmitOptions[morseCodeOption]?.stopTransmission();
-              },
-
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(70)
-              ),
-              mini: true,
-              child: const Icon(
-                Icons.stop,
-                size: 29,
-              ),
-            ),
-          ),
-        ),
         // Expanded chat section below the Loop button
         Expanded(
           child: BasicChat(
-            messagesList: messagesList,
-            onSubmitMessage: onSubmitMessage,
+              messagesList: messagesList,
+              onSubmitMessage: onSubmitMessage,
+              isTransmitting: isTransmitting,
+              onTransmissionEnd: onTransmissionEnd
           ),
         ),
       ],

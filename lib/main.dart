@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:morse_code/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'pages/navigation.dart';
 
 void main() {
-  runApp(const MorseCodeApp());
+  WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(const MorseCodeApp()));
 }
 
 class MorseCodeApp extends StatelessWidget {
@@ -17,8 +21,8 @@ class MorseCodeApp extends StatelessWidget {
       builder: (context, child) {
         final provider = Provider.of<ThemeProvider>(context);
         return MaterialApp(
-          theme: provider.theme,
-          home: const SafeArea(child: Navigation())
+            theme: provider.theme,
+            home: const SafeArea(child: Navigation())
         );
       },
     );

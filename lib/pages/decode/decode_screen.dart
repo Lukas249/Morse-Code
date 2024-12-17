@@ -40,7 +40,7 @@ class DecodeHomeState extends State<DecodeScreen>
   MorseCodeOptions morseCodeOption = MorseCodeOptions.chat;
 
   late final TabController _tabController =
-      TabController(length: tabsNames.length, vsync: this);
+  TabController(length: tabsNames.length, vsync: this);
 
   @override
   void initState() {
