@@ -1,10 +1,6 @@
-import 'package:audioplayers/audioplayers.dart';
-
+import '../sound/sound_manager.dart';
 import '../transmit_morse_code.dart';
 import 'flashlight_manager.dart';
-
-
-//TODO: Check waitTimes  in use
 
 class MorseCodeFlashlightTransmitter extends TransmitMorseCode {
 
@@ -18,33 +14,27 @@ class MorseCodeFlashlightTransmitter extends TransmitMorseCode {
 
   static int timeGapBetweenWords = dotTimeInMilliseconds * 7;
 
-  final FlashlightManager flashlightManager; // nadpisanie  menegera latarki i stworzenie instancji do transmisji
+  late final FlashlightManager flashlightManager; // nadpisanie  menegera latarki i stworzenie instancji do transmisji
+  late final SoundManager? soundManager;
 
-  final AudioPlayer beepSoundForFlashlight = AudioPlayer(); //instancja audioplayer
-  bool isBeepingon = true; //do zaimplementowania w ustawieniach mozliwosc wylaczenia
-
-  MorseCodeFlashlightTransmitter(this.flashlightManager);
+  MorseCodeFlashlightTransmitter(this.flashlightManager, this.soundManager);
 
   @override
   Future<void> transmitDot() async {
+    await soundManager?.play();
     await flashlightManager.turnOnFlashlight();
-    if(isBeepingon == true){
-      await beepSoundForFlashlight.play(AssetSource('beep.mp3'));
-    }
     await Future.delayed(Duration(milliseconds: dotTimeInMilliseconds));
-    await beepSoundForFlashlight.stop();
     await flashlightManager.turnOffFlashlight();
+    await soundManager?.stop();
   }
 
   @override
   Future<void> transmitDash() async {
+    await soundManager?.play();
     await flashlightManager.turnOnFlashlight();
-    if (isBeepingon == true){
-      await beepSoundForFlashlight.play(AssetSource('beep.mp3'));
-    }
     await Future.delayed(Duration(milliseconds: dashTimeInMilliseconds));
-    await beepSoundForFlashlight.stop();
     await flashlightManager.turnOffFlashlight();
+    await soundManager?.stop();
   }
 
   @override
