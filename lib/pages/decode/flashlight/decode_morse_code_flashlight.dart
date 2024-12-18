@@ -9,7 +9,7 @@ enum BrightnessLevel {
 
 class DecodeMorseCodeFlashlight {
   // acceptable upper error in ms in flashlight morse detection
-  static double upperThreshold = 100;
+  static double upperThreshold = 150;
 
   // acceptable lower error in ms in flashlight morse detection
   static double lowerThreshold = 100;
@@ -75,9 +75,9 @@ class DecodeMorseCodeFlashlight {
       int offsetNextWord = _stopwatch.elapsedMilliseconds - MorseCodeFlashlightTransmitter.timeGapBetweenWords;
 
       if(offsetNextWord >= 0 || offsetNextWord.abs() <= lowerThreshold) {
-        _morseCode += "     ";
+        _morseCode += MorseCodeText.MORSE_CODE_WORD_SEPARATOR;
       } else if (offsetNextChar >= 0 || offsetNextChar.abs() <= lowerThreshold) {
-        _morseCode += " ";
+        _morseCode += MorseCodeText.MORSE_CODE_CHAR_SEPARATOR;
       }
 
       brightnessLevel = BrightnessLevel.light;
