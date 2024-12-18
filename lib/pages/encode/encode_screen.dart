@@ -57,7 +57,7 @@ class EncodeScreenState extends State<EncodeScreen> with SingleTickerProviderSta
 
   // transmitters
   late final MorseCodeFlashlightTransmitter flashlightTransmitter = MorseCodeFlashlightTransmitter(
-      flashlightManager);
+      flashlightManager, soundManager);
   late final MorseCodeVibrationTransmitter vibrationTransmitter = MorseCodeVibrationTransmitter(
       vibrationManager);
   late final MorseCodeSoundTransmitter soundTransmitter = MorseCodeSoundTransmitter(
